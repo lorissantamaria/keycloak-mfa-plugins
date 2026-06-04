@@ -97,6 +97,7 @@ public class SmsAuthenticatorFactory implements AuthenticatorFactory {
 			new ProviderConfigProperty("hideResponsePayload", "Redacted API response log message", "Don't log API response body of SMS send request.", ProviderConfigProperty.BOOLEAN_TYPE, false),
 			new ProviderConfigProperty("mobileInputFieldPlaceholder", "Phone number input field placeholder", "The placeholder string user in the phone number input field", ProviderConfigProperty.STRING_TYPE, ""),
 			new ProviderConfigProperty("storeInAttribute", "Set phone number as attribute", "Sets the phone number as a user attribute.", ProviderConfigProperty.BOOLEAN_TYPE, false),
+			new ProviderConfigProperty("phoneNumberAttribute", "Phone number user attribute", "If set, the phone number will be read from this user attribute during setup, skipping the input form. Use 'username' to read from the Keycloak username field. Leave empty to always show the input form.", ProviderConfigProperty.STRING_TYPE, ""),
 			new ProviderConfigProperty("normalizePhoneNumber", "Format phone number", "Normalize the phone number using the E164 standard.", ProviderConfigProperty.BOOLEAN_TYPE, false),
 			new ProviderConfigProperty("numberTypeFilters", "Valid number type filters", "A list of valid number types to filter the input phone number by. Possible values are: FIXED_LINE, MOBILE, "
 				+ " FIXED_LINE_OR_MOBILE, PAGER, TOLL_FREE, PREMIUM_RATE, SHARED_COST, PERSONAL_NUMBER, VOIP, UAN, VOICEMAIL.", ProviderConfigProperty.MULTIVALUED_STRING_TYPE, Collections.emptyList()),

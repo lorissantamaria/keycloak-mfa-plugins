@@ -174,6 +174,23 @@ public class PhoneNumberRequiredAction implements RequiredActionProvider, Creden
 
 	@Override
 	public void requiredActionChallenge(RequiredActionContext context) {
+		AuthenticatorConfigModel config = context.getRealm().getAuthenticatorConfigByAlias("sms-2fa");
+		String attributeName = (config != null && config.getConfig() != null)
+			? config.getConfig().getOrDefault("phoneNumberAttribute", "mobile_number")
+			: "mobile_number";
+
+		String existingNumber = "username".equals(attributeName)
+			? context.getUser().getUsername()
+			: context.getUser().getFirstAttribute(attributeName);
+		if (existingNumber != null && !existingNumber.isBlank()) {
+			logger.infof("Phone number found in user attribute [%s] for user: %s, skipping input form",
+				attributeName, context.getUser().getUsername());
+			context.getAuthenticationSession().setAuthNote("mobile_number", existingNumber);
+			context.getAuthenticationSession().addRequiredAction(PhoneValidationRequiredAction.PROVIDER_ID);
+			context.success();
+			return;
+		}
+
 		Response challenge = context.form()
 			.setAttribute("mobileInputFieldPlaceholder", context.getAuthenticationSession().getAuthNote("mobileInputFieldPlaceholder"))
 			.setAttribute("countryList", getCountryCodeList(context))
