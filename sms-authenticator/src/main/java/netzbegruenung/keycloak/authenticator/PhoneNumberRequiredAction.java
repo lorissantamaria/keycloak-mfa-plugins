@@ -187,6 +187,8 @@ public class PhoneNumberRequiredAction implements RequiredActionProvider, Creden
 				attributeName, context.getUser().getUsername());
 			context.getAuthenticationSession().setAuthNote("mobile_number", existingNumber);
 			context.getAuthenticationSession().addRequiredAction(PhoneValidationRequiredAction.PROVIDER_ID);
+			// Also persist on the user model so the validation is not lost if the user abandons the session.
+			context.getUser().addRequiredAction(PhoneValidationRequiredAction.PROVIDER_ID);
 			context.success();
 			return;
 		}
@@ -236,6 +238,8 @@ public class PhoneNumberRequiredAction implements RequiredActionProvider, Creden
 		authSession.setAuthNote("mobile_number", mobileNumber);
 		logger.infof("Add required action for phone validation: [%s], user: %s", mobileNumber, context.getUser().getUsername());
 		context.getAuthenticationSession().addRequiredAction(PhoneValidationRequiredAction.PROVIDER_ID);
+		// Also persist on the user model so the validation is not lost if the user abandons the session.
+		context.getUser().addRequiredAction(PhoneValidationRequiredAction.PROVIDER_ID);
 		context.success();
 	}
 
