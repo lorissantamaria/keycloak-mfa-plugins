@@ -62,6 +62,13 @@ public class PhoneValidationRequiredAction implements RequiredActionProvider, Cr
 			AuthenticatorConfigModel config = context.getRealm().getAuthenticatorConfigByAlias("sms-2fa");
 
 			String mobileNumber = authSession.getAuthNote("mobile_number");
+			if (mobileNumber == null) {
+				// No phone number collected yet; defer to PhoneNumberRequiredAction which was just added.
+				// It will set the mobile_number auth note and re-add PhoneValidationRequiredAction.
+				logger.infof("mobile_number auth note not set for user: %s, deferring to phone number collection step", user.getUsername());
+				context.success();
+				return;
+			}
 			logger.infof("Validating phone number: %s of user: %s", mobileNumber, user.getUsername());
 
 			int length = Integer.parseInt(config.getConfig().get("length"));
